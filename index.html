@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>VeriScore Interactive Demo</title>
+<title>VeriScore Vault Simulator</title>
 
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 
@@ -18,73 +18,55 @@ body {
 
 .container { max-width: 1200px; margin: auto; }
 
-h1 { font-weight: 600; }
-
 .card {
   background: white;
-  padding: 24px;
-  border-radius: 14px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+  padding: 20px;
+  border-radius: 12px;
   margin-bottom: 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
 }
 
-.grid {
-  display: grid;
-  grid-template-columns: 1.2fr 1fr;
-  gap: 20px;
-}
+h2 { margin-top: 0; }
 
-.section { margin-bottom: 15px; }
-
-label { font-size: 13px; margin-bottom: 4px; display:block; }
-
-select {
+.table {
   width: 100%;
-  padding: 8px;
-  border-radius: 8px;
-  border: 1px solid #CBD8E8;
+  border-collapse: collapse;
+}
+
+.table th, .table td {
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+  text-align: center;
 }
 
 button {
-  margin-top: 15px;
-  padding: 10px 16px;
-  border-radius: 8px;
-  border: none;
+  padding: 10px 15px;
   background: #2E5FA3;
   color: white;
+  border: none;
+  border-radius: 6px;
   cursor: pointer;
 }
 
-.result { text-align: center; }
-
-.score {
-  font-size: 64px;
-  font-weight: 600;
+input {
+  width: 80px;
+  padding: 5px;
 }
 
-.tag {
-  padding: 6px 12px;
-  border-radius: 20px;
-  display: inline-block;
-  margin-top: 10px;
+.summary {
+  display: grid;
+  grid-template-columns: repeat(4,1fr);
+  gap: 15px;
+  text-align: center;
 }
 
-.low { background: #D4EDDA; color: #155724; }
-.medium { background: #FFF3CD; color: #856404; }
-.high { background: #F8D7DA; color: #721C24; }
-
-.metric { margin-top: 10px; font-size: 18px; }
-
-.breakdown div { margin: 4px 0; }
-
-.api {
+.metric {
   background: #0F2444;
-  color: #D6E4F0;
-  padding: 12px;
-  border-radius: 8px;
-  font-family: monospace;
-  font-size: 13px;
+  color: white;
+  padding: 15px;
+  border-radius: 10px;
 }
+
 </style>
 </head>
 
@@ -92,192 +74,116 @@ button {
 
 <div class="container">
 
-<h1>VeriScore Interactive Demo</h1>
-<p>Simulate risk scoring for tokenized food trade receivables</p>
+<h1>VeriScore Vault Simulator</h1>
 
 <div class="card">
-<h3>Scenario Presets</h3>
-<button onclick="loadScenario('low')">Prime EU Import</button>
-<button onclick="loadScenario('mid')">Standard Trade Flow</button>
-<button onclick="loadScenario('high')">High Risk Shipment</button>
-</div>
+<h2>Add Receivables</h2>
 
-<div class="card grid">
+<table class="table" id="table">
+<thead>
+<tr>
+<th>Asset</th>
+<th>Score</th>
+<th>PD</th>
+<th>Amount ($)</th>
+<th>Yield %</th>
+<th>Expected Loss</th>
+</tr>
+</thead>
+<tbody id="rows"></tbody>
+</table>
 
-<div>
-
-<div class="section">
-<label>Compliance Integrity</label>
-<select id="compliance">
-<option value="1">Fully Verified</option>
-<option value="0.8">Minor Gaps</option>
-<option value="0.5">Incomplete</option>
-</select>
-</div>
-
-<div class="section">
-<label>Importer Strength</label>
-<select id="importer">
-<option value="1">Tier 1 (Retail Chain)</option>
-<option value="0.8">Established SME</option>
-<option value="0.5">Unknown</option>
-</select>
-</div>
-
-<div class="section">
-<label>Document Authenticity</label>
-<select id="docs">
-<option value="1">Verified + Notarized</option>
-<option value="0.7">Verified</option>
-<option value="0.4">Unverified</option>
-</select>
-</div>
-
-<div class="section">
-<label>Shipment Type</label>
-<select id="shipment">
-<option value="1">Processed Goods</option>
-<option value="0.7">Chilled</option>
-<option value="0.4">Fresh / Perishable</option>
-</select>
-</div>
-
-<div class="section">
-<label>Corridor Risk</label>
-<select id="corridor">
-<option value="1">EU / OECD</option>
-<option value="0.7">Mixed</option>
-<option value="0.4">High Risk</option>
-</select>
-</div>
-
-<div class="section">
-<label>Logistics Reliability</label>
-<select id="logistics">
-<option value="1">Top Tier Carrier</option>
-<option value="0.8">Standard</option>
-<option value="0.5">Unreliable</option>
-</select>
-</div>
-
-<button onclick="calculateScore()">Calculate VeriScore</button>
+<button onclick="addRow()">Add Receivable</button>
+<button onclick="calculatePortfolio()">Run Simulation</button>
 
 </div>
 
-<div class="result">
-
-<div class="score" id="score">--</div>
-<div id="riskTag" class="tag">Awaiting Input</div>
-
-<div class="metric">PD: <span id="pd">--</span></div>
-<div class="metric">Expected Loss: <span id="el">--</span></div>
-
-</div>
-
+<div class="card summary">
+<div class="metric">Total Capital<br><span id="total">$0</span></div>
+<div class="metric">Avg PD<br><span id="avgpd">0%</span></div>
+<div class="metric">Expected Loss<br><span id="el">0%</span></div>
+<div class="metric">Net Yield<br><span id="yield">0%</span></div>
 </div>
 
 <div class="card">
-<h3>Factor Breakdown</h3>
-<div class="breakdown" id="breakdown"></div>
-</div>
-
-<div class="card">
-<h3>API Output</h3>
-<div class="api" id="apiOutput">
-{
-  "veriScore": null,
-  "pd": null,
-  "expectedLoss": null
-}
-</div>
+<h2>Allocator Insight</h2>
+<p id="insight">Run simulation to view allocation insights</p>
 </div>
 
 </div>
 
 <script>
 
-function loadScenario(type) {
-  if(type === 'low'){
-    setValues(1,1,1,1,1,1);
-  } else if(type === 'mid'){
-    setValues(0.8,0.8,0.7,0.7,0.7,0.8);
+function addRow(){
+  let row = `
+  <tr>
+    <td>Shipment</td>
+    <td><input value="80"></td>
+    <td class="pd">--</td>
+    <td><input value="100000"></td>
+    <td><input value="12"></td>
+    <td class="el">--</td>
+  </tr>
+  `;
+  document.getElementById("rows").innerHTML += row;
+}
+
+function calculatePortfolio(){
+
+  let rows = document.querySelectorAll("#rows tr");
+
+  let totalCapital = 0;
+  let totalPD = 0;
+  let totalEL = 0;
+  let totalYield = 0;
+
+  rows.forEach(r=>{
+    let score = parseFloat(r.children[1].children[0].value);
+    let amount = parseFloat(r.children[3].children[0].value);
+    let yieldRate = parseFloat(r.children[4].children[0].value)/100;
+
+    let pd;
+    if(score >= 85) pd = 0.015;
+    else if(score >= 70) pd = 0.04;
+    else pd = 0.08;
+
+    let lgd = 0.3;
+    let el = pd * lgd;
+
+    r.querySelector(".pd").innerText = (pd*100).toFixed(2)+"%";
+    r.querySelector(".el").innerText = (el*100).toFixed(2)+"%";
+
+    totalCapital += amount;
+    totalPD += pd * amount;
+    totalEL += el * amount;
+    totalYield += yieldRate * amount;
+  });
+
+  let avgPD = totalPD / totalCapital;
+  let avgEL = totalEL / totalCapital;
+  let netYield = (totalYield / totalCapital) - avgEL;
+
+  document.getElementById("total").innerText = "$"+totalCapital.toLocaleString();
+  document.getElementById("avgpd").innerText = (avgPD*100).toFixed(2)+"%";
+  document.getElementById("el").innerText = (avgEL*100).toFixed(2)+"%";
+  document.getElementById("yield").innerText = (netYield*100).toFixed(2)+"%";
+
+  let insight = "";
+
+  if(netYield > 0.08){
+    insight = "High-performing vault. Strong allocation candidate.";
+  } else if(netYield > 0.04){
+    insight = "Balanced risk-return profile.";
   } else {
-    setValues(0.5,0.5,0.4,0.4,0.4,0.5);
-  }
-}
-
-function setValues(c,i,d,s,co,l){
-  document.getElementById('compliance').value = c;
-  document.getElementById('importer').value = i;
-  document.getElementById('docs').value = d;
-  document.getElementById('shipment').value = s;
-  document.getElementById('corridor').value = co;
-  document.getElementById('logistics').value = l;
-}
-
-function calculateScore(){
-
-  let weights = {
-    compliance:25,
-    importer:20,
-    docs:15,
-    shipment:15,
-    corridor:10,
-    logistics:10
-  };
-
-  let values = {
-    compliance: parseFloat(compliance.value),
-    importer: parseFloat(importer.value),
-    docs: parseFloat(docs.value),
-    shipment: parseFloat(shipment.value),
-    corridor: parseFloat(corridor.value),
-    logistics: parseFloat(logistics.value)
-  };
-
-  let score = 0;
-  let breakdownHTML = "";
-
-  for(let key in values){
-    let val = values[key] * weights[key];
-    score += val;
-    breakdownHTML += `<div>${key}: ${val.toFixed(1)}</div>`;
+    insight = "Risk outweighs return. Rebalance toward higher scores.";
   }
 
-  score = Math.round(score);
-  document.getElementById('score').innerText = score;
-  document.getElementById('breakdown').innerHTML = breakdownHTML;
+  document.getElementById("insight").innerText = insight;
 
-  let pd;
-  if(score >= 85) pd = 0.015;
-  else if(score >= 70) pd = 0.04;
-  else pd = 0.08;
-
-  let lgd = 0.3;
-  let el = pd * lgd;
-
-  document.getElementById('pd').innerText = (pd*100).toFixed(2)+"%";
-  document.getElementById('el').innerText = (el*100).toFixed(2)+"%";
-
-  let tag = document.getElementById('riskTag');
-
-  if(score >= 85){
-    tag.innerText="Prime";
-    tag.className="tag low";
-  } else if(score >= 70){
-    tag.innerText="Core";
-    tag.className="tag medium";
-  } else {
-    tag.innerText="High Risk";
-    tag.className="tag high";
-  }
-
-  document.getElementById('apiOutput').innerText = JSON.stringify({
-    veriScore: score,
-    pd: pd,
-    expectedLoss: el
-  }, null, 2);
 }
+
+addRow();
+addRow();
 
 </script>
 

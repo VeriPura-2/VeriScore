@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>VeriScore — Risk Engine for Trade Receivables</title>
+<title>VeriScore — Trade Finance Risk Engine</title>
 
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 
@@ -15,12 +15,14 @@
 --blue:#2E5FA3;
 --bg:#F8F9FB;
 --border:#CBD8E8;
+--green:#1a6b4a;
+--red:#C8504A;
 }
 
 body{
 font-family:'DM Sans',sans-serif;
-background:var(--bg);
 margin:0;
+background:var(--bg);
 color:#1A2332;
 }
 
@@ -32,18 +34,18 @@ padding:40px 20px;
 
 .hero{
 text-align:center;
-margin-bottom:40px;
+margin-bottom:60px;
 }
 
 .hero h1{
-font-size:40px;
+font-size:42px;
 margin-bottom:10px;
 }
 
 .hero p{
-color:#5A6878;
 max-width:700px;
 margin:auto;
+color:#5A6878;
 }
 
 .card{
@@ -60,27 +62,20 @@ grid-template-columns:1fr 1fr;
 gap:20px;
 }
 
-label{
-font-size:13px;
-display:block;
-margin-bottom:5px;
+.stage{
+border-left:4px solid var(--blue);
+padding:15px;
+margin-bottom:15px;
 }
 
-select,input{
-width:100%;
-padding:10px;
-border-radius:8px;
-border:1px solid var(--border);
+.stage h3{
+margin:0;
+font-size:18px;
 }
 
-button{
-margin-top:15px;
-padding:12px;
-background:var(--blue);
-color:white;
-border:none;
-border-radius:8px;
-cursor:pointer;
+.metric{
+font-size:18px;
+margin-top:10px;
 }
 
 .score{
@@ -99,11 +94,6 @@ margin-top:10px;
 .medium{background:#FFF3CD;color:#856404;}
 .high{background:#F8D7DA;color:#721C24;}
 
-.metric{
-font-size:18px;
-margin-top:10px;
-}
-
 .table{
 width:100%;
 border-collapse:collapse;
@@ -119,7 +109,6 @@ text-align:center;
 display:grid;
 grid-template-columns:repeat(4,1fr);
 gap:15px;
-text-align:center;
 }
 
 .metricBox{
@@ -127,15 +116,7 @@ background:var(--navy);
 color:white;
 padding:15px;
 border-radius:10px;
-}
-
-.api{
-background:#0F2444;
-color:#D6E4F0;
-padding:12px;
-border-radius:8px;
-font-family:monospace;
-font-size:13px;
+text-align:center;
 }
 
 </style>
@@ -148,12 +129,35 @@ font-size:13px;
 <!-- HERO -->
 <div class="hero">
 <h1>VeriScore</h1>
-<p>Risk Engine for Tokenized Trade Receivables — enabling institutional-grade collateral in DeFi and structured finance.</p>
+<p>Transforming global trade receivables into machine-verifiable collateral for capital markets</p>
+</div>
+
+<!-- PROBLEM -->
+<div class="card">
+<h2>The Problem</h2>
+<p>Trade receivables generate real yield but remain unallocatable due to non-standardized risk, fragmented documentation, and unverifiable compliance.</p>
+</div>
+
+<!-- PROCESS FLOW -->
+<div class="card">
+<h2>Transaction Flow (10 Stages)</h2>
+
+<div class="stage"><h3>1. Pre-Order Validation</h3><p>Eligibility and compliance verified before purchase</p></div>
+<div class="stage"><h3>2. Product Mapping</h3><p>Specification aligned with regulatory requirements</p></div>
+<div class="stage"><h3>3. Commercial Documentation</h3><p>Invoices and licenses validated</p></div>
+<div class="stage"><h3>4. Inspection & Certification</h3><p>Health and compliance verified</p></div>
+<div class="stage"><h3>5. Loading & Dispatch</h3><p>Cold chain and logistics verified</p></div>
+<div class="stage"><h3>6. Export Clearance</h3><p>Customs documentation validated</p></div>
+<div class="stage"><h3>7. Transit Monitoring</h3><p>Shipment tracked in real-time</p></div>
+<div class="stage"><h3>8. Entry Compliance</h3><p>Border verification completed</p></div>
+<div class="stage"><h3>9. Customs Release</h3><p>Tariff and duty validated</p></div>
+<div class="stage"><h3>10. Final Delivery</h3><p>Receivable becomes payable asset</p></div>
+
 </div>
 
 <!-- SCORING -->
 <div class="card">
-<h2>Single Asset Risk Simulation</h2>
+<h2>VeriScore Engine</h2>
 
 <div class="grid">
 
@@ -161,9 +165,9 @@ font-size:13px;
 
 <label>Compliance</label>
 <select id="compliance">
-<option value="1">Fully Verified</option>
-<option value="0.8">Minor Gaps</option>
-<option value="0.5">Incomplete</option>
+<option value="1">Verified</option>
+<option value="0.7">Partial</option>
+<option value="0.4">Unverified</option>
 </select>
 
 <label>Importer</label>
@@ -175,19 +179,12 @@ font-size:13px;
 
 <label>Documents</label>
 <select id="docs">
-<option value="1">Notarized</option>
-<option value="0.7">Verified</option>
+<option value="1">Verified</option>
+<option value="0.7">Partial</option>
 <option value="0.4">Unverified</option>
 </select>
 
-<label>Shipment</label>
-<select id="shipment">
-<option value="1">Processed</option>
-<option value="0.7">Chilled</option>
-<option value="0.4">Fresh</option>
-</select>
-
-<button onclick="calculateScore()">Run VeriScore</button>
+<button onclick="calc()">Run VeriScore</button>
 
 </div>
 
@@ -197,6 +194,7 @@ font-size:13px;
 
 <div class="metric">PD: <span id="pd">--</span></div>
 <div class="metric">Expected Loss: <span id="el">--</span></div>
+
 </div>
 
 </div>
@@ -204,7 +202,7 @@ font-size:13px;
 
 <!-- VAULT -->
 <div class="card">
-<h2>Vault Simulator</h2>
+<h2>Vault Simulation</h2>
 
 <table class="table" id="table">
 <thead>
@@ -220,7 +218,7 @@ font-size:13px;
 </table>
 
 <button onclick="addRow()">Add Asset</button>
-<button onclick="simulate()">Run Vault</button>
+<button onclick="simulate()">Run Simulation</button>
 
 </div>
 
@@ -232,38 +230,19 @@ font-size:13px;
 <div class="metricBox">Net Yield<br><span id="net">0%</span></div>
 </div>
 
-<!-- API -->
-<div class="card">
-<h2>API Output</h2>
-<div class="api" id="api">
-{
-  "veriScore": null,
-  "pd": null,
-  "expectedLoss": null
-}
-</div>
-</div>
-
 </div>
 
 <script>
 
-function calculateScore(){
-let c = parseFloat(compliance.value);
-let i = parseFloat(importer.value);
-let d = parseFloat(docs.value);
-let s = parseFloat(shipment.value);
+function calc(){
+let c=parseFloat(compliance.value);
+let i=parseFloat(importer.value);
+let d=parseFloat(docs.value);
 
-let score = (c*25 + i*20 + d*15 + s*15);
-score = Math.round(score);
+let score=Math.round(c*25+i*20+d*15);
+let pd=score>=85?0.015:score>=70?0.04:0.08;
+let el=pd*0.3;
 
-let pd = score>=85?0.015:score>=70?0.04:0.08;
-let el = pd*0.3;
-
-scoreEl(score,pd,el);
-}
-
-function scoreEl(score,pd,el){
 document.getElementById("score").innerText=score;
 document.getElementById("pd").innerText=(pd*100).toFixed(2)+"%";
 document.getElementById("el").innerText=(el*100).toFixed(2)+"%";
@@ -273,12 +252,6 @@ let tag=document.getElementById("tag");
 if(score>=85){tag.innerText="Prime";tag.className="tag low";}
 else if(score>=70){tag.innerText="Core";tag.className="tag medium";}
 else{tag.innerText="High Risk";tag.className="tag high";}
-
-document.getElementById("api").innerText=JSON.stringify({
-veriScore:score,
-pd:pd,
-expectedLoss:el
-},null,2);
 }
 
 function addRow(){
@@ -318,14 +291,17 @@ let avgpd=pd/cap;
 let avgel=el/cap;
 let net=(y/cap)-avgel;
 
+capEl(avgpd,avgel,net,cap);
+}
+
+function capEl(pd,el,net,cap){
 document.getElementById("cap").innerText="$"+cap.toLocaleString();
-document.getElementById("avgpd").innerText=(avgpd*100).toFixed(2)+"%";
-document.getElementById("avgel").innerText=(avgel*100).toFixed(2)+"%";
+document.getElementById("avgpd").innerText=(pd*100).toFixed(2)+"%";
+document.getElementById("avgel").innerText=(el*100).toFixed(2)+"%";
 document.getElementById("net").innerText=(net*100).toFixed(2)+"%";
 }
 
-addRow();
-addRow();
+addRow();addRow();
 
 </script>
 

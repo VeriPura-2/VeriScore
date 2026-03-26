@@ -3,122 +3,35 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>VeriScore — Trade Finance Risk Engine</title>
+<title>VeriScore — Capitalizing Trade Receivables</title>
 
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 
 <style>
+body{font-family:'DM Sans',sans-serif;margin:0;background:#F8F9FB;color:#1A2332}
+.container{max-width:1200px;margin:auto;padding:30px}
+.nav{display:flex;gap:10px;margin-bottom:20px}
+.nav button{padding:10px 15px;border:none;border-radius:6px;background:#CBD8E8;cursor:pointer}
+.nav button.active{background:#2E5FA3;color:white}
 
-:root{
---navy:#0F2444;
---blue:#2E5FA3;
---bg:#F8F9FB;
---border:#CBD8E8;
---green:#1a6b4a;
---red:#C8504A;
-}
+.card{background:white;padding:20px;border-radius:12px;margin-bottom:20px;box-shadow:0 5px 20px rgba(0,0,0,0.05)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
 
-body{
-font-family:'DM Sans',sans-serif;
-margin:0;
-background:var(--bg);
-color:#1A2332;
-}
+.score{font-size:64px;font-weight:600}
+.tag{padding:6px 12px;border-radius:20px;display:inline-block;margin-top:10px}
+.low{background:#D4EDDA;color:#155724}
+.medium{background:#FFF3CD;color:#856404}
+.high{background:#F8D7DA;color:#721C24}
 
-.container{
-max-width:1200px;
-margin:auto;
-padding:40px 20px;
-}
+.metric{margin-top:10px;font-size:18px}
 
-.hero{
-text-align:center;
-margin-bottom:60px;
-}
+.slider{width:100%}
 
-.hero h1{
-font-size:42px;
-margin-bottom:10px;
-}
+.table{width:100%;border-collapse:collapse}
+.table th,.table td{padding:10px;border-bottom:1px solid #eee;text-align:center}
 
-.hero p{
-max-width:700px;
-margin:auto;
-color:#5A6878;
-}
-
-.card{
-background:white;
-padding:24px;
-border-radius:14px;
-box-shadow:0 10px 30px rgba(0,0,0,0.05);
-margin-bottom:20px;
-}
-
-.grid{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:20px;
-}
-
-.stage{
-border-left:4px solid var(--blue);
-padding:15px;
-margin-bottom:15px;
-}
-
-.stage h3{
-margin:0;
-font-size:18px;
-}
-
-.metric{
-font-size:18px;
-margin-top:10px;
-}
-
-.score{
-font-size:64px;
-font-weight:600;
-}
-
-.tag{
-padding:6px 12px;
-border-radius:20px;
-display:inline-block;
-margin-top:10px;
-}
-
-.low{background:#D4EDDA;color:#155724;}
-.medium{background:#FFF3CD;color:#856404;}
-.high{background:#F8D7DA;color:#721C24;}
-
-.table{
-width:100%;
-border-collapse:collapse;
-}
-
-.table th,.table td{
-padding:10px;
-border-bottom:1px solid #eee;
-text-align:center;
-}
-
-.summary{
-display:grid;
-grid-template-columns:repeat(4,1fr);
-gap:15px;
-}
-
-.metricBox{
-background:var(--navy);
-color:white;
-padding:15px;
-border-radius:10px;
-text-align:center;
-}
-
+.summary{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.metricBox{background:#0F2444;color:white;padding:10px;border-radius:8px;text-align:center}
 </style>
 </head>
 
@@ -126,40 +39,57 @@ text-align:center;
 
 <div class="container">
 
-<!-- HERO -->
-<div class="hero">
 <h1>VeriScore</h1>
-<p>Transforming global trade receivables into machine-verifiable collateral for capital markets</p>
+<p>Turning trade receivables into allocatable financial assets</p>
+
+<!-- NAV -->
+<div class="nav">
+<button onclick="showTab('importer')" class="active">Importer</button>
+<button onclick="showTab('curator')">Curator</button>
+<button onclick="showTab('investor')">Investor</button>
 </div>
 
-<!-- PROBLEM -->
+<!-- IMPORTER VIEW -->
+<div id="importer" class="tab">
+
 <div class="card">
-<h2>The Problem</h2>
-<p>Trade receivables generate real yield but remain unallocatable due to non-standardized risk, fragmented documentation, and unverifiable compliance.</p>
+<h2>Transaction Flow</h2>
+<p>10-stage validated process → receivable becomes investable asset</p>
+
+<div>
+1. Pre-Order → 2. Product → 3. Docs → 4. Inspection → 5. Dispatch →  
+6. Export → 7. Transit → 8. Entry → 9. Customs → 10. Delivery
+</div>
 </div>
 
-<!-- PROCESS FLOW -->
 <div class="card">
-<h2>Transaction Flow (10 Stages)</h2>
+<h2>Before vs After</h2>
 
-<div class="stage"><h3>1. Pre-Order Validation</h3><p>Eligibility and compliance verified before purchase</p></div>
-<div class="stage"><h3>2. Product Mapping</h3><p>Specification aligned with regulatory requirements</p></div>
-<div class="stage"><h3>3. Commercial Documentation</h3><p>Invoices and licenses validated</p></div>
-<div class="stage"><h3>4. Inspection & Certification</h3><p>Health and compliance verified</p></div>
-<div class="stage"><h3>5. Loading & Dispatch</h3><p>Cold chain and logistics verified</p></div>
-<div class="stage"><h3>6. Export Clearance</h3><p>Customs documentation validated</p></div>
-<div class="stage"><h3>7. Transit Monitoring</h3><p>Shipment tracked in real-time</p></div>
-<div class="stage"><h3>8. Entry Compliance</h3><p>Border verification completed</p></div>
-<div class="stage"><h3>9. Customs Release</h3><p>Tariff and duty validated</p></div>
-<div class="stage"><h3>10. Final Delivery</h3><p>Receivable becomes payable asset</p></div>
+<button onclick="toggleMode()">Toggle Verification</button>
+
+<p id="beforeAfterText">
+Without verification: fragmented, manual, high risk
+</p>
 
 </div>
 
-<!-- SCORING -->
-<div class="card">
-<h2>VeriScore Engine</h2>
+</div>
 
-<div class="grid">
+<!-- CURATOR VIEW -->
+<div id="curator" class="tab" style="display:none">
+
+<div class="card">
+<h2>Scenario Engine</h2>
+
+<select id="scenario" onchange="loadScenario()">
+<option value="prime">Prime Import</option>
+<option value="standard">Standard Flow</option>
+<option value="risk">High Risk</option>
+</select>
+
+</div>
+
+<div class="card grid">
 
 <div>
 
@@ -171,17 +101,10 @@ text-align:center;
 </select>
 
 <label>Importer</label>
-<select id="importer">
+<select id="importerStrength">
 <option value="1">Tier 1</option>
 <option value="0.8">Established</option>
 <option value="0.5">Unknown</option>
-</select>
-
-<label>Documents</label>
-<select id="docs">
-<option value="1">Verified</option>
-<option value="0.7">Partial</option>
-<option value="0.4">Unverified</option>
 </select>
 
 <button onclick="calc()">Run VeriScore</button>
@@ -189,60 +112,117 @@ text-align:center;
 </div>
 
 <div style="text-align:center">
+
 <div class="score" id="score">--</div>
 <div id="tag" class="tag">Awaiting</div>
 
 <div class="metric">PD: <span id="pd">--</span></div>
-<div class="metric">Expected Loss: <span id="el">--</span></div>
+<div class="metric">EL: <span id="el">--</span></div>
 
 </div>
 
 </div>
-</div>
 
-<!-- VAULT -->
 <div class="card">
-<h2>Vault Simulation</h2>
+<h2>Lifecycle Risk</h2>
 
-<table class="table" id="table">
-<thead>
-<tr>
-<th>Score</th>
-<th>Amount</th>
-<th>Yield</th>
-<th>PD</th>
-<th>EL</th>
-</tr>
-</thead>
-<tbody id="rows"></tbody>
-</table>
+<input type="range" min="1" max="4" value="1" class="slider" id="timeline" oninput="updateTimeline()">
 
-<button onclick="addRow()">Add Asset</button>
-<button onclick="simulate()">Run Simulation</button>
+<p id="timelineText">Pre-Shipment Risk</p>
 
 </div>
 
-<!-- SUMMARY -->
+<div class="card">
+<h2>Curator Control Panel</h2>
+
+<label>Min Score Threshold</label>
+<input type="number" id="minScore" value="70">
+
+<label>Max Exposure %</label>
+<input type="number" id="exposure" value="40">
+
+<button onclick="simulate()">Run Allocation</button>
+
+</div>
+
 <div class="card summary">
 <div class="metricBox">Capital<br><span id="cap">$0</span></div>
-<div class="metricBox">Avg PD<br><span id="avgpd">0%</span></div>
-<div class="metricBox">Expected Loss<br><span id="avgel">0%</span></div>
-<div class="metricBox">Net Yield<br><span id="net">0%</span></div>
+<div class="metricBox">PD<br><span id="avgpd">0%</span></div>
+<div class="metricBox">EL<br><span id="avgel">0%</span></div>
+<div class="metricBox">Yield<br><span id="net">0%</span></div>
+</div>
+
+</div>
+
+<!-- INVESTOR VIEW -->
+<div id="investor" class="tab" style="display:none">
+
+<div class="card">
+<h2>Portfolio Outcome</h2>
+<p>Verified assets reduce loss and increase net yield</p>
+
+<table class="table">
+<tr><th>Scenario</th><th>PD</th><th>Yield</th></tr>
+<tr><td>Unverified</td><td>8%</td><td>6%</td></tr>
+<tr><td>Verified</td><td>2%</td><td>10%</td></tr>
+</table>
+
+</div>
+
 </div>
 
 </div>
 
 <script>
 
+function showTab(tab){
+document.querySelectorAll(".tab").forEach(t=>t.style.display="none");
+document.getElementById(tab).style.display="block";
+
+document.querySelectorAll(".nav button").forEach(b=>b.classList.remove("active"));
+event.target.classList.add("active");
+}
+
+let verified=false;
+
+function toggleMode(){
+verified=!verified;
+
+document.getElementById("beforeAfterText").innerText=
+verified?
+"With verification: structured, validated, low risk":
+"Without verification: fragmented, manual, high risk";
+}
+
+function loadScenario(){
+let s=document.getElementById("scenario").value;
+
+if(s==="prime"){setValues(1,1);}
+if(s==="standard"){setValues(0.8,0.8);}
+if(s==="risk"){setValues(0.5,0.5);}
+}
+
+function setValues(c,i){
+compliance.value=c;
+importerStrength.value=i;
+}
+
 function calc(){
 let c=parseFloat(compliance.value);
-let i=parseFloat(importer.value);
-let d=parseFloat(docs.value);
+let i=parseFloat(importerStrength.value);
 
-let score=Math.round(c*25+i*20+d*15);
+let score=Math.round(c*25+i*20);
 let pd=score>=85?0.015:score>=70?0.04:0.08;
 let el=pd*0.3;
 
+scoreEl(score,pd,el);
+}
+
+function scoreEl(score,pd,el){
+scoreElUpdate(score,pd,el);
+}
+
+function scoreElUpdate(score,pd,el){
 document.getElementById("score").innerText=score;
 document.getElementById("pd").innerText=(pd*100).toFixed(2)+"%";
 document.getElementById("el").innerText=(el*100).toFixed(2)+"%";
@@ -254,54 +234,23 @@ else if(score>=70){tag.innerText="Core";tag.className="tag medium";}
 else{tag.innerText="High Risk";tag.className="tag high";}
 }
 
-function addRow(){
-rows.innerHTML+=`
-<tr>
-<td><input value="80"></td>
-<td><input value="100000"></td>
-<td><input value="12"></td>
-<td class="pd">--</td>
-<td class="el">--</td>
-</tr>`;
+function updateTimeline(){
+let t=timeline.value;
+let text=["Pre-Shipment","In Transit","At Border","Delivered"];
+document.getElementById("timelineText").innerText=text[t-1];
 }
 
 function simulate(){
-let trs=document.querySelectorAll("#rows tr");
+let cap=1000000;
+let pd=0.04;
+let el=0.012;
+let net=0.10-el;
 
-let cap=0,pd=0,el=0,y=0;
-
-trs.forEach(r=>{
-let s=parseFloat(r.children[0].children[0].value);
-let a=parseFloat(r.children[1].children[0].value);
-let yr=parseFloat(r.children[2].children[0].value)/100;
-
-let p=s>=85?0.015:s>=70?0.04:0.08;
-let e=p*0.3;
-
-r.children[3].innerText=(p*100).toFixed(2)+"%";
-r.children[4].innerText=(e*100).toFixed(2)+"%";
-
-cap+=a;
-pd+=p*a;
-el+=e*a;
-y+=yr*a;
-});
-
-let avgpd=pd/cap;
-let avgel=el/cap;
-let net=(y/cap)-avgel;
-
-capEl(avgpd,avgel,net,cap);
-}
-
-function capEl(pd,el,net,cap){
 document.getElementById("cap").innerText="$"+cap.toLocaleString();
 document.getElementById("avgpd").innerText=(pd*100).toFixed(2)+"%";
 document.getElementById("avgel").innerText=(el*100).toFixed(2)+"%";
 document.getElementById("net").innerText=(net*100).toFixed(2)+"%";
 }
-
-addRow();addRow();
 
 </script>
 
